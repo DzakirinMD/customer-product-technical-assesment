@@ -3,12 +3,16 @@ package net.dzakirin.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Data;
+import lombok.*;
 
 import java.util.UUID;
 
-@Data
+@Builder
+@Getter
+@Setter
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "customers")
 public class Customer {
 

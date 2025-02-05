@@ -1,12 +1,16 @@
 package net.dzakirin.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.util.UUID;
 
-@Data
+@Builder
+@Getter
+@Setter
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "order_products")
 public class OrderProduct {
 
