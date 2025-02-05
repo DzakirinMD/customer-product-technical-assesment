@@ -38,7 +38,7 @@ public class OrderService {
 
     public BaseListResponse<OrderResponse> getAllOrders(Pageable pageable) {
         Page<Order> orders = orderRepository.findAll(pageable);
-        List<OrderResponse> orderResponses = OrderMapper.toResponseList(orders.getContent());
+        List<OrderResponse> orderResponses = OrderMapper.toOrderResponseList(orders.getContent());
 
         return BaseListResponse.<OrderResponse>builder()
                 .success(true)
@@ -56,7 +56,7 @@ public class OrderService {
         return BaseResponse.<OrderResponse>builder()
                 .success(true)
                 .message("Order found")
-                .data(OrderMapper.toResponse(order))
+                .data(OrderMapper.toOrderResponse(order))
                 .build();
     }
 
@@ -86,7 +86,7 @@ public class OrderService {
         return BaseResponse.<OrderResponse>builder()
                 .success(true)
                 .message("Order created successfully")
-                .data(OrderMapper.toResponse(order))
+                .data(OrderMapper.toOrderResponse(order))
                 .build();
     }
 

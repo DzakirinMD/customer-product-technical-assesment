@@ -10,7 +10,7 @@ import java.util.List;
 @UtilityClass
 public class ProductMapper {
 
-    public static ProductResponse toResponse(Product product) {
+    public static ProductResponse toProductResponse(Product product) {
         if (product == null) {
             return null;
         }
@@ -25,11 +25,11 @@ public class ProductMapper {
 
     public static List<ProductResponse> toResponseList(List<Product> products) {
         return products.stream()
-                .map(ProductMapper::toResponse)
+                .map(ProductMapper::toProductResponse)
                 .toList();
     }
 
-    public static Product toEntity(ProductRequest productRequest) {
+    public static Product toProduct(ProductRequest productRequest) {
         if (productRequest == null) {
             return null;
         }

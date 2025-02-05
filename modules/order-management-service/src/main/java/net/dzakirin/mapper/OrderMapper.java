@@ -11,7 +11,7 @@ import java.util.List;
 @UtilityClass
 public class OrderMapper {
 
-    public static OrderResponse toResponse(Order order) {
+    public static OrderResponse toOrderResponse(Order order) {
         if (order == null || order.getCustomer() == null) {
             return null;
         }
@@ -24,9 +24,9 @@ public class OrderMapper {
                 .build();
     }
 
-    public static List<OrderResponse> toResponseList(List<Order> orders) {
+    public static List<OrderResponse> toOrderResponseList(List<Order> orders) {
         return orders.stream()
-                .map(OrderMapper::toResponse)
+                .map(OrderMapper::toOrderResponse)
                 .toList();
     }
 

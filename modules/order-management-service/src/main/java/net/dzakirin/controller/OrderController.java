@@ -11,9 +11,8 @@ import net.dzakirin.dto.response.BaseListResponse;
 import net.dzakirin.dto.response.BaseResponse;
 import net.dzakirin.dto.response.OrderResponse;
 import net.dzakirin.service.OrderService;
-import org.springframework.data.domain.PageRequest;
+import net.dzakirin.utils.PaginationUtils;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,7 +38,7 @@ public class OrderController {
                     array = @ArraySchema(schema = @Schema(allowableValues = {"orderDate", "customerId"},
                             type = "string")))
             @RequestParam(defaultValue = "orderDate") String[] sort) {
-        Pageable pageable = PageRequest.of(page - 1, size, Sort.by(sort).descending());
+        Pageable pageable = PaginationUtils.getPageRequest(page, size, sort);
         return ResponseEntity.ok(orderService.getAllOrders(pageable));
     }
 
