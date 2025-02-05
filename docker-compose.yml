@@ -1,0 +1,76 @@
+version: '3.1'
+name: customer-product-technical-assesment
+services:
+  db:
+    container_name: customer-product-technical-assesment-postgres
+    image: postgres:alpine
+    restart: always
+    ports:
+      - "5435:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: customer_product_technical_assesment_db
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - pg-volume:/var/lib/postgresql/data
+      - ./docker/init.sql:/docker-entrypoint-initdb.d/init.sql
+  zookeeper:
+    container_name: customer-product-technical-assesment-zookeeper
+    image: confluentinc/cp-zookeeper:latest
+    restart: always
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - 22181:2181
+    volumes:
+      -  ./docker-data/zoo-volume/data:/var/lib/zookeeper/data
+      -  ./docker-data/zoo-volume/log:/var/lib/zookeeper/log
+  kafka:
+    container_name: customer-product-technical-assesment-kafka
+    image: confluentinc/cp-kafka:latest
+    restart: always
+    depends_on:
+      - zookeeper
+    ports:
+      - 19092:19092
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://customer-product-technical-assesment-kafka:9092,PLAINTEXT_HOST://localhost:19092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_MESSAGE_MAX_BYTES: 20971520
+      KAFKA_REPLICA_FETCH_MAX_BYTES: 20971520
+    volumes:
+      - ./docker-data/kafka-volume/data:/var/lib/kafka/data
+  kafka-ui:
+    container_name: template-be-kafka-ui
+    image: provectuslabs/kafka-ui:v0.6.2
+    restart: always
+    ports:
+      - 18080:8080
+    environment:
+      DYNAMIC_CONFIG_ENABLED: true
+    volumes:
+      - ./docker-data/kui-volume/kui:/etc/kafkaui
+  redis:
+    container_name: template-be-redis
+    image: 'bitnami/redis:latest'
+    restart: always
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./docker-data/redis-volume:/data
+
+volumes:
+  pg-volume:
+    external: false
