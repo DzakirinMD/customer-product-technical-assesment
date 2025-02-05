@@ -7,6 +7,7 @@ import net.dzakirin.dto.request.OrderRequest;
 import net.dzakirin.dto.response.BaseListResponse;
 import net.dzakirin.dto.response.BaseResponse;
 import net.dzakirin.dto.response.OrderResponse;
+import net.dzakirin.exception.InsufficientStockException;
 import net.dzakirin.exception.ResourceNotFoundException;
 import net.dzakirin.mapper.OrderMapper;
 import net.dzakirin.mapper.OrderProductMapper;
@@ -70,6 +71,9 @@ public class OrderService {
         // Fetch Products in Batch (to minimize DB calls)
         Map<UUID, Product> productMap = fetchProductMap(orderRequest.getOrderProducts());
 
+        // Validate Stock Availability
+        validateStockAvailability(orderRequest, productMap);
+
         // Create Order
         Order order = Order.builder()
                 .customer(customer)
@@ -80,6 +84,8 @@ public class OrderService {
         List<OrderProduct> orderProducts = OrderProductMapper.toOrderProductList(orderRequest, order, productMap);
         order.setOrderProducts(orderProducts);
 
+        // Deduct Stock
+        deductStock(orderProducts);
 
         orderRepository.save(order);
 
@@ -115,5 +121,35 @@ public class OrderService {
         }
 
         return productMap;
+    }
+
+    /**
+     * Validate if requested product stock is sufficient.
+     */
+    private void validateStockAvailability(OrderRequest orderRequest, Map<UUID, Product> productMap) {
+        List<UUID> insufficientStockProducts = orderRequest.getOrderProducts().stream()
+                .filter(request -> {
+                    Product product = productMap.get(request.getProductId());
+                    return product.getStock() < request.getQuantity();
+                })
+                .map(OrderProductRequest::getProductId)
+                .toList();
+
+        if (!insufficientStockProducts.isEmpty()) {
+            throw new InsufficientStockException(
+                    ErrorCodes.INSUFFICIENT_STOCK.getMessage(insufficientStockProducts.toString())
+            );
+        }
+    }
+
+    /**
+     * Deduct stock for ordered products.
+     */
+    private void deductStock(List<OrderProduct> orderProducts) {
+        for (OrderProduct orderProduct : orderProducts) {
+            Product product = orderProduct.getProduct();
+            product.setStock(product.getStock() - orderProduct.getQuantity());
+        }
+        productRepository.saveAll(orderProducts.stream().map(OrderProduct::getProduct).toList());
     }
 }

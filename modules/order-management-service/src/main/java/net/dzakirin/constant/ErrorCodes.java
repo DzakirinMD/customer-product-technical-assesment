@@ -9,6 +9,7 @@ public enum ErrorCodes {
     PRODUCT_TITLE_CHARACTER_VALIDATION("Product title must be between 3 and 255 characters"),
     PRODUCT_PRICE_VALIDATION("Product price must be greater than or equal to zero"),
     PRODUCT_STOCK_VALIDATION("Product stock must be greater than or equal to zero"),
+    INSUFFICIENT_STOCK("Insufficient stock for products: %s"),
 
     // Order error
     ORDER_NOT_FOUND("Order not found with ID: %s"),
