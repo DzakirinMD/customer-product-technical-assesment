@@ -82,10 +82,12 @@ public class RewardService {
         Optional<LoyaltyRules> rule = loyaltyRulesRepository
                 .findFirstByMinOrderAmountLessThanEqualAndRuleActiveTrue(orderTotal);
 
-        return rule.map(loyaltyRule -> {
-            BigDecimal multiplier = orderTotal.divide(loyaltyRule.getMinOrderAmount(), BigDecimal.ROUND_DOWN);
-            return multiplier.multiply(BigDecimal.valueOf(loyaltyRule.getPointsAwarded())).intValue();
-        }).orElse(0);
+        return rule.map(
+                        loyaltyRule -> {
+                            BigDecimal multiplier = orderTotal.divide(loyaltyRule.getMinOrderAmount(), BigDecimal.ROUND_DOWN);
+                            return multiplier.multiply(BigDecimal.valueOf(loyaltyRule.getPointsAwarded())).intValue();
+                        })
+                .orElse(0);
     }
 
     /**
