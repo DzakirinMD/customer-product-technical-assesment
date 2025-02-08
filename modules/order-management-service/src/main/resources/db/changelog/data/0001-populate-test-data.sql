@@ -7,8 +7,8 @@ INSERT INTO customers (id, first_name, last_name, email) VALUES
 
 -- Insert Sample Products
 INSERT INTO products (id, title, price, stock) VALUES
-    (gen_random_uuid(), 'Java Programming Book', 49.99, 100),
-    (gen_random_uuid(), 'Spring Boot Essentials', 39.99, 50);
+    (gen_random_uuid(), 'Java Programming Book', 20.01, 100),
+    (gen_random_uuid(), 'Spring Boot Essentials', 120.01, 50);
 
 -- Insert Sample Orders
 INSERT INTO orders (id, customer_id, order_date) VALUES
