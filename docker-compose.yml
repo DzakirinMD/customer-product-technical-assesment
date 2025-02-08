@@ -10,9 +10,9 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: customer_product_technical_assesment_db
+      POSTGRES_DB: postgres
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -79,7 +79,7 @@ services:
       - db
       - kafka
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/customer_product_technical_assesment_db?currentSchema=order_management_service
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/order_management_service_db?currentSchema=order_management_service
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
@@ -96,7 +96,7 @@ services:
       - db
       - kafka
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/customer_product_technical_assesment_db?currentSchema=loyalty_service
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/loyalty_service_db?currentSchema=loyalty_service
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092

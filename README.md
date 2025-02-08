@@ -44,7 +44,7 @@ This project consists of **three microservices**:
 ✅ **Stores orders in PostgreSQL**  
 
 📌 **Flow:**
-- Customer places an order.
+- Customer places an [order](http://localhost:10001/swagger-ui/index.html#/order-controller/createOrder).
 - Order details are **saved** in the database.
 - A **Kafka event** (`order-data-changed` topic) is **published**.
 - **Email Service** and **Loyalty Service** consume this event.
@@ -161,10 +161,11 @@ rm -rf docker-data
 ---
 
 ## 📜 API Documentation
-| Service | Swagger URL |
-|---------|------------|
+| Service             | Swagger URL                                                                      |
+|---------------------|----------------------------------------------------------------------------------|
 | 📦 Order Management | [http://localhost:10001/swagger-ui.html](http://localhost:10001/swagger-ui.html) |
-| ✉️ Email Service | [http://localhost:10002/swagger-ui.html](http://localhost:10002/swagger-ui.html) |
+| ✉️ Email Service    | [http://localhost:10002/swagger-ui.html](http://localhost:10002/swagger-ui.html) |
+| 🔄 Kafka-UI         | [http://localhost:18080](http://localhost:18080)                                 |
 
 🛑 **Loyalty Service does not have an exposed API**. It only processes rewards internally 🎯.
 
