@@ -19,7 +19,6 @@ services:
     volumes:
       - pg-volume:/var/lib/postgresql/data
       - ./docker/init.sql:/docker-entrypoint-initdb.d/init.sql
-
   zookeeper:
     container_name: customer-product-technical-assesment-zookeeper
     image: confluentinc/cp-zookeeper:latest
@@ -32,7 +31,6 @@ services:
     volumes:
       -  ./docker-data/zoo-volume/data:/var/lib/zookeeper/data
       -  ./docker-data/zoo-volume/log:/var/lib/zookeeper/log
-
   kafka:
     container_name: customer-product-technical-assesment-kafka
     image: confluentinc/cp-kafka:latest
@@ -50,10 +48,8 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_MESSAGE_MAX_BYTES: 20971520
       KAFKA_REPLICA_FETCH_MAX_BYTES: 20971520
-      KAFKA_CREATE_TOPICS: "order-data-changed:1:1"  # Ensure topic is created at startup
     volumes:
       - ./docker-data/kafka-volume/data:/var/lib/kafka/data
-
   kafka-ui:
     container_name: customer-product-technical-assesment-kafka-ui
     image: provectuslabs/kafka-ui:v0.6.2
@@ -65,59 +61,6 @@ services:
     volumes:
       - ./docker-data/kui-volume/kui:/etc/kafkaui
 
-  order-management-service:
-    container_name: customer-product-technical-assesment-order-service
-    build:
-      context: ./modules/order-management-service
-      dockerfile: Dockerfile
-    restart: always
-    ports:
-      - "10001:10001"
-    depends_on:
-      - db
-      - kafka
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/customer_product_technical_assesment_db?currentSchema=order_management_service
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: postgres
-      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
-
-  loyalty-service:
-    container_name: customer-product-technical-assesment-loyalty-service
-    build:
-      context: ./modules/loyalty-service
-      dockerfile: Dockerfile
-    restart: always
-    ports:
-      - "10003:10003"
-    depends_on:
-      - db
-      - kafka
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/customer_product_technical_assesment_db?currentSchema=loyalty_service
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: postgres
-      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
-      CLIENT_INTERNAL_EMAIL_SERVICE_BASEURL: http://email-service:10002/v1
-
-  email-service:
-    container_name: customer-product-technical-assesment-email-service
-    build:
-      context: ./modules/email-service
-      dockerfile: Dockerfile
-    restart: always
-    ports:
-      - "10002:10002"
-    depends_on:
-      - kafka
-    environment:
-      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
-      SPRING_MAIL_HOST: smtp.gmail.com
-      SPRING_MAIL_USERNAME: dzakirinmd@gmail.com
-      SPRING_MAIL_PASSWORD: kbnqcrhckwqiaqcs
-      SPRING_MAIL_PORT: 587
-      SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: "true"
-      SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: "true"
-
 volumes:
   pg-volume:
+    external: false
