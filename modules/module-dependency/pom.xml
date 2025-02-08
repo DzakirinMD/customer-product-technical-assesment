@@ -17,6 +17,9 @@
         <springmail.version>3.4.2</springmail.version>
         <sl4jlocal.version>2.0.16</sl4jlocal.version>
         <jackson.version>2.16.1</jackson.version>
+        <groovy.version>3.0.19</groovy.version>
+        <spock-core.version>2.4-M1-groovy-3.0</spock-core.version>
+        <objenesis.version>3.3</objenesis.version>
     </properties>
 
     <dependencyManagement>
@@ -91,7 +94,24 @@
             </dependency>
 
             <!-- Test -->
-            <!--			TODO Groovy with Spock-->
+            <dependency>
+                <groupId>org.codehaus.groovy</groupId>
+                <artifactId>groovy-all</artifactId>
+                <version>${groovy.version}</version>
+                <type>pom</type>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.spockframework</groupId>
+                <artifactId>spock-core</artifactId>
+                <version>${spock-core.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.objenesis</groupId>
+                <artifactId>objenesis</artifactId>
+                <version>${objenesis.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 </project>
