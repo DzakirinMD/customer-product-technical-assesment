@@ -21,19 +21,19 @@ This project consists of **three microservices**:
 ---
 
 ## ⚙️ Tech Stack
-| Technology              | Purpose |
-|-------------------------|---------|
-| **Java 17+**            | Programming Language |
-| **Spring Boot 3.3.x**   | Application Framework |
+| Technology              | Purpose                                |
+|-------------------------|----------------------------------------|
+| **Java 17+**            | Programming Language                   |
+| **Spring Boot 3.3.x**   | Application Framework                  |
 | **Spring WebFlux**      | Reactive Programming (Loyalty Service) |
-| **Spring Data JPA**     | Database Interaction |
-| **Kafka**               | Event Streaming |
-| **OpenAPI (SpringDoc)** | API Documentation |
-| **PostgreSQL**          | Relational Database |
-| **Groovy & Spock**      | Unit Testing |
-| **Maven**               | Dependency Management |
-| **Docker & Docker Compose** | Containerization |
-| **GitHub Actions**      | CI/CD Pipeline |
+| **Spring Data JPA**     | Database Interaction                   |
+| **Kafka**               | Event Streaming                        |
+| **OpenAPI (SpringDoc)** | API Documentation                      |
+| **PostgreSQL**          | Relational Database                    |
+| **Groovy & Spock**      | Unit Testing                           |
+| **Maven**               | Dependency Management                  |
+| **Docker & Docker Compose** | Containerization                       |
+| **GitHub Actions**      | [CI/CD Pipeline](https://github.com/DzakirinMD/customer-product-technical-assesment/actions)                     |
 
 ---
 
@@ -187,7 +187,7 @@ If loyalty points are awarded, another email is sent:
 - 🏗️ **Microservices Architecture** using **Kafka** and **WebFlux**.  
 - ⚙️ **PostgreSQL**, **Spring Boot**, and **Maven**.  
 - ✅ **Fully containerized** with **Docker Compose**.  
-- 🔄 **CI/CD** using **GitHub Actions**.  
+- 🔄 [**CI/CD** using **GitHub Actions**.  ](https://github.com/DzakirinMD/customer-product-technical-assesment/actions)
 - 📜 **OpenAPI documentation** for API testing.  
 
 🎯 **Loyalty Service does not expose APIs**, it only processes loyalty points.  
