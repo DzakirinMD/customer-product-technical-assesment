@@ -51,7 +51,7 @@ services:
     volumes:
       - ./docker-data/kafka-volume/data:/var/lib/kafka/data
   kafka-ui:
-    container_name: template-be-kafka-ui
+    container_name: customer-product-technical-assesment-kafka-ui
     image: provectuslabs/kafka-ui:v0.6.2
     restart: always
     ports:
@@ -61,7 +61,7 @@ services:
     volumes:
       - ./docker-data/kui-volume/kui:/etc/kafkaui
   redis:
-    container_name: template-be-redis
+    container_name: customer-product-technical-assesment-redis
     image: 'bitnami/redis:latest'
     restart: always
     environment:
