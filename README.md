@@ -1,25 +1,26 @@
-# Customer Order Management System
+# 🚀 Customer Order Management System
 
-A **Spring Boot-based microservices application** that enables customers to place orders, receive email notifications, and earn loyalty points. It follows **event-driven architecture** using **Kafka** and **WebFlux** for communication.
+A **Spring Boot-based microservices application** that enables customers to **place orders, receive email notifications, and earn loyalty points**. It follows an **event-driven architecture** using **Kafka** and **WebFlux** for communication.
 
-## Architecture Overview
+## 🏗️ Architecture Overview
 This project consists of **three microservices**:
-1. **Order Management Service**  
-   - Handles order creation and retrieval.
-   - Publishes an event to Kafka after an order is placed.
 
-2. **Email Service**  
-   - Listens for order events from Kafka.
-   - Sends confirmation emails to customers.
+1️⃣ **Order Management Service**  
+   - Handles order creation and retrieval.  
+   - Publishes an event to **Kafka** after an order is placed.
 
-3. **Loyalty Service**  
-   - Listens for order events from Kafka.
-   - Processes loyalty points based on order amount.
-   - Calls Email Service (via WebFlux) if points are awarded.
+2️⃣ **Email Service**  
+   - Listens for order events from Kafka.  
+   - Sends order confirmation emails to customers.
+
+3️⃣ **Loyalty Service**  
+   - Listens for order events from Kafka.  
+   - Processes loyalty points based on total order amount.  
+   - Calls **Email Service** (via **WebFlux**) to notify customers if points are awarded.
 
 ---
 
-## Tech Stack
+## ⚙️ Tech Stack
 | Technology              | Purpose |
 |-------------------------|---------|
 | **Java 17+**            | Programming Language |
@@ -31,45 +32,48 @@ This project consists of **three microservices**:
 | **PostgreSQL**          | Relational Database |
 | **Groovy & Spock**      | Unit Testing |
 | **Maven**               | Dependency Management |
+| **Docker & Docker Compose** | Containerization |
 | **GitHub Actions**      | CI/CD Pipeline |
 
 ---
 
-## Microservices and Data Flow
-### 1️⃣ Order Management Service
+## 📡 Microservices and Data Flow
+### 🔹 1️⃣ Order Management Service
 ✅ **Handles orders**  
 ✅ **Publishes events to Kafka**  
 ✅ **Stores orders in PostgreSQL**  
 
-🚀 **Flow**:
+📌 **Flow:**
 - Customer places an order.
 - Order details are **saved** in the database.
-- A **Kafka event is published** (`ORDER_CREATED` topic).
-- Email Service and Loyalty Service consume this event.
+- A **Kafka event** (`order-data-changed` topic) is **published**.
+- **Email Service** and **Loyalty Service** consume this event.
 
-### 2️⃣ Email Service
+### 🔹 2️⃣ Email Service
 ✅ **Consumes Kafka events**  
 ✅ **Sends confirmation emails to customers**  
 
-🚀 **Flow**:
-- Listens for `ORDER_CREATED` event.
+📌 **Flow:**
+- Listens for `order-data-changed` event.
 - Sends an **email confirmation** to the customer.
 
-### 3️⃣ Loyalty Service
+### 🔹 3️⃣ Loyalty Service
 ✅ **Processes loyalty points**  
 ✅ **Calls Email Service (via WebFlux) if points are awarded**  
 
-🚀 **Flow**:
-- Listens for `ORDER_CREATED` event.
+📌 **Flow:**
+- Listens for `order-data-changed` event.
 - Checks **loyalty rules**:
   - If the **order amount meets the threshold**, points are awarded.
-  - Calls Email Service via **WebFlux** to notify the customer.
+  - Calls **Email Service** via **WebFlux** to notify the customer.
   - If no points are awarded, logs the event.
+
+🛑 **Loyalty Service does not have exposed endpoints** for now. It only processes reward points 🎯.
 
 ---
 
-## Database Schema
-### Order Management Service
+## 🗄️ Database Schema
+### 🔹 Order Management Service
 | Table Name | Description |
 |------------|------------|
 | `customers` | Stores customer details. |
@@ -77,7 +81,7 @@ This project consists of **three microservices**:
 | `orders` | Stores orders linked to customers. |
 | `order_products` | Many-to-many mapping between orders and products. |
 
-### Loyalty Service
+### 🔹 Loyalty Service
 | Table Name | Description |
 |------------|------------|
 | `loyalty_points` | Stores customer points balance. |
@@ -86,15 +90,21 @@ This project consists of **three microservices**:
 
 ---
 
-## Kafka Topics
-| Topic Name | Description |
-|------------|-------------|
-| `ORDER_CREATED` | Published by Order Management Service when an order is created. |
-| `LOYALTY_POINTS_AWARDED` | Published when loyalty points are granted (for future enhancements). |
+## 📢 Kafka Topics
+| Topic Name | Description | Producer                 | Consumer                       |
+|------------|-------------|--------------------------|--------------------------------|
+| `order-data-changed` | Published when an order is created. | order-management-service | email-service, loyalty-service |
 
 ---
 
-## Setup and Running the Services
+## 🚀 Running the Application
+
+📌 **For Production Mode**, see 👉 [Setup and Running the Services in Prod Mode](#setup-and-running-the-services-in-prod-mode)    
+📌 **For Development Mode**, see 👉 [Setup and Running the Services in Dev Mode](#setup-and-running-the-services-in-dev-mode)  
+
+---
+
+## 🏭 Setup and Running the Services in Prod Mode
 ### 1️⃣ Clone the Repository
 ```sh
 git clone https://github.com/DzakirinMD/template-be.git
@@ -107,13 +117,14 @@ Run all services using **Docker Compose**:
 mvn clean package
 docker-compose up --build -d
 ```
+⚠️ **Wait ~30 seconds** for services to start. Start up performance depends on your computer.
 
 ### 3️⃣ Stop the Services
 ```sh
 docker-compose down
 ```
 
-### 4️⃣ Reset Dev Environment
+### 4️⃣ Reset the Environment
 ```sh
 docker-compose down -v  # Removes volumes
 rm -rf docker-data      # Deletes all stored data
@@ -121,53 +132,64 @@ rm -rf docker-data      # Deletes all stored data
 
 ---
 
-## API Documentation
-- **Kafka UI**: [http://localhost:18080](http://localhost:18080)    
-
----
-
-## Kafka UI Setup
-1. Open [Kafka UI](http://localhost:18080).
-2. Click **Configure New Cluster**.
-3. Set **Cluster Name** = `Localhost`.
-4. Set **Bootstrap Servers**:
-   - `template-be-kafka:9092`
-5. Click **Validate**, then **Submit**.
-
----
-
-## Testing
-### 1️⃣ Run Unit Tests
+## 🛠 Setup and Running the Services in Dev Mode
+### 1️⃣ Clone the Repository
 ```sh
-mvn test
+git clone https://github.com/DzakirinMD/template-be.git
+cd template-be
 ```
 
-### 2️⃣ Run Integration Tests
+### 2️⃣ Start the **Kafka & Database Only**
 ```sh
-mvn verify
+mvn clean package
+docker-compose -f docker-compose-dev.yml up --build -d
+```
+⚠️ **After this, start each microservice manually!**  
+⚠️ **Set environment variable** → `spring.profiles.active=dev` when running services.
+
+### 3️⃣ Stop the Services
+```sh
+docker-compose -f docker-compose-dev.yml down
 ```
 
-### 3️⃣ GitHub Actions
-✅ Runs unit tests automatically on **Pull Requests (PRs)**.
-
----
-
-## Expected Behavior
-### 📩 Email Notifications
-- When an order is placed, an email is sent:  
-  **"Your order has been created successfully!"**
-- If loyalty points are awarded, another email is sent:  
-  **"You've earned X loyalty points!"**
-
-### 📝 Logging (If No Points Are Awarded)
-```
-[INFO] LoyaltyService: No points awarded for Order ID: XYZ
+### 4️⃣ Reset the Environment
+```sh
+docker-compose -f docker-compose-dev.yml down -v
+rm -rf docker-data
 ```
 
 ---
 
-## Services & URLs
+## 📜 API Documentation
 | Service | Swagger URL |
 |---------|------------|
-| Order Management | [http://localhost:10001/swagger-ui.html](http://localhost:10001/swagger-ui.html) |
-| Email Service | [http://localhost:10002/swagger-ui.html](http://localhost:10002/swagger-ui.html) |
+| 📦 Order Management | [http://localhost:10001/swagger-ui.html](http://localhost:10001/swagger-ui.html) |
+| ✉️ Email Service | [http://localhost:10002/swagger-ui.html](http://localhost:10002/swagger-ui.html) |
+
+🛑 **Loyalty Service does not have an exposed API**. It only processes rewards internally 🎯.
+
+---
+
+## 📧 Expected Email Notifications
+When an order is placed, an email is sent:
+
+  ![Order Confirmation Email](assets/order-confirmation-email.JPG)
+
+<br/>
+
+If loyalty points are awarded, another email is sent:
+
+  ![Loyalty Reward Email](assets/loyalty-reward-email.JPG)
+
+---
+
+## 📌 Summary
+- 🏗️ **Microservices Architecture** using **Kafka** and **WebFlux**.  
+- ⚙️ **PostgreSQL**, **Spring Boot**, and **Maven**.  
+- ✅ **Fully containerized** with **Docker Compose**.  
+- 🔄 **CI/CD** using **GitHub Actions**.  
+- 📜 **OpenAPI documentation** for API testing.  
+
+🎯 **Loyalty Service does not expose APIs**, it only processes loyalty points.  
+
+🚀 **Follow the setup instructions above to start the application!** 🚀

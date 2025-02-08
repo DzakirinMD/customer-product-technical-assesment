@@ -48,8 +48,10 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_MESSAGE_MAX_BYTES: 20971520
       KAFKA_REPLICA_FETCH_MAX_BYTES: 20971520
+      KAFKA_CREATE_TOPICS: "order-data-changed:1:1"  # Ensure topic is created at startup
     volumes:
       - ./docker-data/kafka-volume/data:/var/lib/kafka/data
+
   kafka-ui:
     container_name: customer-product-technical-assesment-kafka-ui
     image: provectuslabs/kafka-ui:v0.6.2
@@ -57,7 +59,9 @@ services:
     ports:
       - 18080:8080
     environment:
-      DYNAMIC_CONFIG_ENABLED: true
+      KAFKA_CLUSTERS_0_NAME: "localhost"
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: "customer-product-technical-assesment-kafka:9092"
+      KAFKA_CLUSTERS_0_PROPERTIES_SECURITY_PROTOCOL: "PLAINTEXT"
     volumes:
       - ./docker-data/kui-volume/kui:/etc/kafkaui
 
