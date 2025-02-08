@@ -56,7 +56,7 @@ public class OrderProcessingService {
                 .build();
 
         emailService.sendEmail(emailDetails);
-        log.info("Order confirmation email sent to {}", emailDetails.getRecipient());
+        log.info("Order confirmation email has been sent to {}", emailDetails.getRecipient());
     }
 
 }
