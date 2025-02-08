@@ -18,23 +18,17 @@ public class EmailService {
     private final JavaMailSender javaMailSender;
 
     public void sendEmail(EmailDetails emailDetails) {
-
         try {
-
-            // Creating a simple mail message
             SimpleMailMessage mailMessage = new SimpleMailMessage();
-
-            // Setting up necessary details
             mailMessage.setFrom(senderEmail);
             mailMessage.setTo(emailDetails.getRecipient());
-            mailMessage.setText(emailDetails.getMsgBody());
             mailMessage.setSubject(emailDetails.getSubject());
+            mailMessage.setText(emailDetails.getMsgBody());
 
-            // Sending the mail
             javaMailSender.send(mailMessage);
-
+            log.info("Email sent to {}", emailDetails.getRecipient());
         } catch (Exception e) {
-            log.error("Error while sending email => {}", e.toString());
+            log.error("Error while sending email: {}", e.toString());
         }
     }
 }
