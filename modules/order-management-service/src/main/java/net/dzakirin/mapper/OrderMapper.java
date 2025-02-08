@@ -8,6 +8,7 @@ import net.dzakirin.dto.response.OrderResponse;
 import net.dzakirin.model.Order;
 import net.dzakirin.model.OrderProduct;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @UtilityClass
@@ -80,6 +81,7 @@ public class OrderMapper {
                     .productId(null)
                     .productTitle("Unknown Product")
                     .quantity(0)
+                    .price(new BigDecimal(0L))
                     .build();
         }
 
@@ -87,6 +89,7 @@ public class OrderMapper {
                 .productId(orderProduct.getProduct().getId())
                 .productTitle(orderProduct.getProduct().getTitle())
                 .quantity(orderProduct.getQuantity())
+                .price(orderProduct.getProduct().getPrice())
                 .build();
     }
 }
