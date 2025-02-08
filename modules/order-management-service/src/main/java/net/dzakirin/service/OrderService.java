@@ -2,6 +2,7 @@ package net.dzakirin.service;
 
 import lombok.RequiredArgsConstructor;
 import net.dzakirin.constant.ErrorCodes;
+import net.dzakirin.constant.EventType;
 import net.dzakirin.dto.request.OrderProductRequest;
 import net.dzakirin.dto.request.OrderRequest;
 import net.dzakirin.dto.response.BaseListResponse;
@@ -15,7 +16,9 @@ import net.dzakirin.model.Customer;
 import net.dzakirin.model.Order;
 import net.dzakirin.model.OrderProduct;
 import net.dzakirin.model.Product;
+import net.dzakirin.producer.OrderDataChangedProducer;
 import net.dzakirin.repository.CustomerRepository;
+import net.dzakirin.common.dto.event.OrderEvent;
 import net.dzakirin.repository.OrderRepository;
 import net.dzakirin.repository.ProductRepository;
 import org.springframework.data.domain.Page;
@@ -36,6 +39,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
     private final CustomerRepository customerRepository;
+    private final OrderDataChangedProducer orderDataChangedProducer;
 
     public BaseListResponse<OrderResponse> getAllOrders(Pageable pageable) {
         Page<Order> orders = orderRepository.findAll(pageable);
@@ -87,7 +91,10 @@ public class OrderService {
         // Deduct Stock
         deductStock(orderProducts);
 
+        // Save and Publish event
         orderRepository.save(order);
+        OrderEvent orderEvent = OrderMapper.toOrderEvent(order);
+        orderDataChangedProducer.publishEvent(orderEvent.getId().toString(), orderEvent, EventType.ORDER_CREATED.getEventName());
 
         return BaseResponse.<OrderResponse>builder()
                 .success(true)

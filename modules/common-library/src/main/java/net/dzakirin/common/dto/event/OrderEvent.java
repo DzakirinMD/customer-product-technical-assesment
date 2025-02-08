@@ -1,4 +1,4 @@
-package net.dzakirin.dto.response;
+package net.dzakirin.common.dto.event;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
@@ -10,10 +10,11 @@ import java.util.UUID;
 
 @Data
 @Builder
-public class OrderResponse {
+public class OrderEvent {
     private UUID id;
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
     private LocalDateTime orderDate;
     private UUID customerId;
-    private List<OrderProductResponse> orderProducts;
+    private String customerEmail;
+    private List<OrderProductEvent> orderProducts;
 }
