@@ -1,4 +1,4 @@
-package net.dzakirin.dto.response;
+package net.dzakirin.common.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

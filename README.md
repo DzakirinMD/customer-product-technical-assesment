@@ -68,8 +68,6 @@ This project consists of **three microservices**:
   - Calls **Email Service** via **WebFlux** to notify the customer.
   - If no points are awarded, logs the event.
 
-🛑 **Loyalty Service does not have exposed endpoints** for now. It only processes reward points 🎯.
-
 ---
 
 ## 🗄️ Database Schema
@@ -204,14 +202,13 @@ rm -rf docker-data      # Deletes all stored data
 
 ---
 
-## 📜 API Documentation
-| Service             | Swagger URL                                                                      |
-|---------------------|----------------------------------------------------------------------------------|
+## 📜 Microservices API Documentation
+| Service            | Swagger URL                                                                      |
+|--------------------|----------------------------------------------------------------------------------|
 | 📦 Order Management | [http://localhost:10001/swagger-ui.html](http://localhost:10001/swagger-ui.html) |
-| ✉️ Email Service    | [http://localhost:10002/swagger-ui.html](http://localhost:10002/swagger-ui.html) |
-| 🔄 Kafka-UI         | [http://localhost:18080](http://localhost:18080)                                 |
-
-🛑 **Loyalty Service does not have an exposed API**. It only processes rewards internally 🎯.
+| ✉️ Email Service   | [http://localhost:10002/swagger-ui.html](http://localhost:10002/swagger-ui.html) |
+| 🏆 Loyalty Service  | [http://localhost:10003/swagger-ui.html](http://localhost:10003/swagger-ui.html) |
+| 🔄 Kafka-UI        | [http://localhost:18080](http://localhost:18080)                                 |
 
 ---
 
@@ -234,7 +231,5 @@ If loyalty points are awarded, another email is sent:
 - ✅ **Fully containerized** with **Docker Compose**.  
 - 🔄 [**CI/CD** using **GitHub Actions**.  ](https://github.com/DzakirinMD/customer-product-technical-assesment/actions)
 - 📜 **OpenAPI documentation** for API testing.  
-
-🎯 **Loyalty Service does not expose APIs**, it only processes loyalty points.  
 
 🚀 **Follow the setup instructions above to start the application!** 🚀
