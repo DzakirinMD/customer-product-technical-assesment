@@ -13,9 +13,17 @@ public enum ErrorCodes {
 
     // Order error
     ORDER_NOT_FOUND("Order not found with ID: %s"),
+    MINIMUM_ORDER_QUANTITY("Minimum order quantity is 1 for product: %s"),
 
-    // Customer error
-    CUSTOMER_NOT_FOUND("Customer not found with ID: %s");
+    // Customer errors
+    CUSTOMER_NOT_FOUND("Customer not found with ID: %s"),
+    CUSTOMER_FIRST_NAME_EMPTY("Customer first name cannot be empty"),
+    CUSTOMER_FIRST_NAME_LENGTH("Customer first name must be between 2 and 100 characters"),
+    CUSTOMER_LAST_NAME_EMPTY("Customer last name cannot be empty"),
+    CUSTOMER_LAST_NAME_LENGTH("Customer last name must be between 2 and 100 characters"),
+    CUSTOMER_EMAIL_EMPTY("Customer email cannot be empty"),
+    CUSTOMER_EMAIL_INVALID("Invalid email format"),
+    CUSTOMER_EMAIL_ALREADY_EXISTS("Customer email is already registered");
 
     private final String messageTemplate;
 
