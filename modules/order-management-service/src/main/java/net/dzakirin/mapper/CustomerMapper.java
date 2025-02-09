@@ -1,11 +1,9 @@
 package net.dzakirin.mapper;
 
 import lombok.experimental.UtilityClass;
-import net.dzakirin.dto.request.CustomerCreationRequest;
-import net.dzakirin.dto.request.ProductRequest;
+import net.dzakirin.dto.request.CustomerUpsertRequest;
 import net.dzakirin.dto.response.CustomerResponse;
 import net.dzakirin.model.Customer;
-import net.dzakirin.model.Product;
 
 import java.util.List;
 
@@ -31,15 +29,15 @@ public class CustomerMapper {
                 .toList();
     }
 
-    public static Customer toCustomer(CustomerCreationRequest customerCreationRequest) {
-        if (customerCreationRequest == null) {
+    public static Customer toCustomer(CustomerUpsertRequest customerUpsertRequest) {
+        if (customerUpsertRequest == null) {
             return null;
         }
 
         return Customer.builder()
-                .firstName(customerCreationRequest.getFirstName())
-                .lastName(customerCreationRequest.getLastName())
-                .email(customerCreationRequest.getEmail())
+                .firstName(customerUpsertRequest.getFirstName())
+                .lastName(customerUpsertRequest.getLastName())
+                .email(customerUpsertRequest.getEmail())
                 .build();
     }
 }

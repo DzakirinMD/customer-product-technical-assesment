@@ -8,7 +8,7 @@ import lombok.Data;
  */
 @Data
 @Builder
-public class CustomerCreationRequest {
+public class CustomerUpsertRequest {
     private String firstName;
     private String lastName;
     private String email;

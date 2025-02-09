@@ -6,7 +6,7 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import net.dzakirin.dto.request.CustomerCreationRequest;
+import net.dzakirin.dto.request.CustomerUpsertRequest;
 import net.dzakirin.dto.response.BaseListResponse;
 import net.dzakirin.dto.response.BaseResponse;
 import net.dzakirin.dto.response.CustomerResponse;
@@ -15,6 +15,8 @@ import net.dzakirin.utils.PaginationUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -41,7 +43,15 @@ public class CustomerController {
 
     @Operation(summary = "Create a new customer")
     @PostMapping
-    public ResponseEntity<BaseResponse<CustomerResponse>> createCustomer(@Valid @RequestBody CustomerCreationRequest customerCreationRequest) {
-        return ResponseEntity.ok(customerService.createCustomer(customerCreationRequest));
+    public ResponseEntity<BaseResponse<CustomerResponse>> createCustomer(@Valid @RequestBody CustomerUpsertRequest customerUpsertRequest) {
+        return ResponseEntity.ok(customerService.createCustomer(customerUpsertRequest));
+    }
+
+    @Operation(summary = "Update an existing customer")
+    @PutMapping("/{id}")
+    public ResponseEntity<BaseResponse<CustomerResponse>> updateCustomer(
+            @PathVariable UUID id,
+            @Valid @RequestBody CustomerUpsertRequest customerUpsertRequest) {
+        return ResponseEntity.ok(customerService.updateCustomer(id, customerUpsertRequest));
     }
 }
