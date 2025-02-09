@@ -232,6 +232,4 @@ If loyalty points are awarded, another email is sent:
 - 🔄 [**CI/CD** using **GitHub Actions**.  ](https://github.com/DzakirinMD/customer-product-technical-assesment/actions)
 - 📜 **OpenAPI documentation** for API testing.  
 
-🎯 **Loyalty Service does not expose APIs**, it only processes loyalty points.  
-
 🚀 **Follow the setup instructions above to start the application!** 🚀
