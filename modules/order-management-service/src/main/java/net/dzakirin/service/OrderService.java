@@ -5,11 +5,12 @@ import net.dzakirin.constant.ErrorCodes;
 import net.dzakirin.constant.EventType;
 import net.dzakirin.dto.request.OrderProductRequest;
 import net.dzakirin.dto.request.OrderRequest;
-import net.dzakirin.dto.response.BaseListResponse;
-import net.dzakirin.dto.response.BaseResponse;
+import net.dzakirin.common.dto.response.BaseListResponse;
+import net.dzakirin.common.dto.response.BaseResponse;
 import net.dzakirin.dto.response.OrderResponse;
 import net.dzakirin.exception.InsufficientStockException;
 import net.dzakirin.exception.ResourceNotFoundException;
+import net.dzakirin.exception.ValidationException;
 import net.dzakirin.mapper.OrderMapper;
 import net.dzakirin.mapper.OrderProductMapper;
 import net.dzakirin.model.Customer;
@@ -31,6 +32,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import static net.dzakirin.constant.ErrorCodes.MINIMUM_ORDER_QUANTITY;
 
 @Service
 @RequiredArgsConstructor
@@ -67,16 +70,16 @@ public class OrderService {
 
     @Transactional
     public BaseResponse<OrderResponse> createOrder(OrderRequest orderRequest) {
+        // Fetch Products in Batch (to minimize DB calls)
+        Map<UUID, Product> productMap = getProducts(orderRequest.getOrderProducts());
+
+        // Validate Stock Availability
+        validateStockAvailability(orderRequest, productMap);
+
         // Fetch Customer
         Customer customer = customerRepository.findById(orderRequest.getCustomerId())
                 .orElseThrow(() -> new ResourceNotFoundException(
                         ErrorCodes.CUSTOMER_NOT_FOUND.getMessage(orderRequest.getCustomerId().toString())));
-
-        // Fetch Products in Batch (to minimize DB calls)
-        Map<UUID, Product> productMap = fetchProductMap(orderRequest.getOrderProducts());
-
-        // Validate Stock Availability
-        validateStockAvailability(orderRequest, productMap);
 
         // Create Order
         Order order = Order.builder()
@@ -106,7 +109,16 @@ public class OrderService {
     /**
      * Fetch all products from database in a single query to reduce DB calls.
      */
-    private Map<UUID, Product> fetchProductMap(List<OrderProductRequest> orderProducts) {
+    private Map<UUID, Product> getProducts(List<OrderProductRequest> orderProducts) {
+        // Collect all product IDs with quantity less than 1 for validation
+        List<UUID> invalidProductIds = orderProducts.stream()
+                .filter(orderProductRequest -> orderProductRequest.getQuantity() < 1)
+                .map(OrderProductRequest::getProductId)
+                .toList();
+        if (!invalidProductIds.isEmpty()) {
+            throw new ValidationException(MINIMUM_ORDER_QUANTITY.getMessage(invalidProductIds.toString()));
+        }
+
         List<UUID> productIds = orderProducts.stream()
                 .map(OrderProductRequest::getProductId)
                 .toList();

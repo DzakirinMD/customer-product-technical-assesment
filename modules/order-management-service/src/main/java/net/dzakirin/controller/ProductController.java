@@ -7,8 +7,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import net.dzakirin.dto.request.ProductRequest;
-import net.dzakirin.dto.response.BaseListResponse;
-import net.dzakirin.dto.response.BaseResponse;
+import net.dzakirin.common.dto.response.BaseListResponse;
+import net.dzakirin.common.dto.response.BaseResponse;
 import net.dzakirin.dto.response.ProductResponse;
 import net.dzakirin.service.ProductService;
 import net.dzakirin.utils.PaginationUtils;
@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/v1/products")
 @RequiredArgsConstructor
+@RequestMapping("/v1/products")
 public class ProductController {
 
     private final ProductService productService;

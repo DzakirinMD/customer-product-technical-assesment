@@ -68,8 +68,6 @@ This project consists of **three microservices**:
   - Calls **Email Service** via **WebFlux** to notify the customer.
   - If no points are awarded, logs the event.
 
-🛑 **Loyalty Service does not have exposed endpoints** for now. It only processes reward points 🎯.
-
 ---
 
 ## 🗄️ Database Schema
@@ -117,14 +115,36 @@ Run all services using **Docker Compose**:
 mvn clean package
 docker-compose up --build -d
 ```
-⚠️ **Wait ~30 seconds** for services to start. Start up performance depends on your computer.
+⚠️ **Wait ~30 seconds** for services to start. Startup performance depends on your computer.
 
-### 3️⃣ Stop the Services
+### 3️⃣ Connect to the Database
+You can connect to the **PostgreSQL database** using the following credentials:
+
+```
+🔗 **Connection URL:** `jdbc:postgresql://localhost:5435/postgres`
+👤 **User:** `postgres`
+🔑 **Password:** `postgres`
+📂 **Database:** `postgres`
+```
+
+#### **Connect Using CLI**
+```sh
+psql -h localhost -p 5435 -U postgres -d postgres
+```
+
+#### **Connect Using DBeaver / PgAdmin**
+- **Host:** `localhost`
+- **Port:** `5435`
+- **Username:** `postgres`
+- **Password:** `postgres`
+- **Database Name:** `postgres`
+
+### 4️⃣ Stop the Services
 ```sh
 docker-compose down
 ```
 
-### 4️⃣ Reset the Environment
+### 5️⃣ Reset the Environment
 ```sh
 docker-compose down -v  # Removes volumes
 rm -rf docker-data      # Deletes all stored data
@@ -147,27 +167,48 @@ docker-compose -f docker-compose-dev.yml up --build -d
 ⚠️ **After this, start each microservice manually!**  
 ⚠️ **Set environment variable** → `spring.profiles.active=dev` when running services.
 
-### 3️⃣ Stop the Services
+### 3️⃣ Connect to the Database
+You can connect to the **PostgreSQL database** using the following credentials:
+
+```
+🔗 **Connection URL:** `jdbc:postgresql://localhost:5435/postgres`
+👤 **User:** `postgres`
+🔑 **Password:** `postgres`
+📂 **Database:** `postgres`
+```
+
+#### **Connect Using CLI**
+```sh
+psql -h localhost -p 5435 -U postgres -d postgres
+```
+
+#### **Connect Using DBeaver / PgAdmin**
+- **Host:** `localhost`
+- **Port:** `5435`
+- **Username:** `postgres`
+- **Password:** `postgres`
+- **Database Name:** `postgres`
+
+### 4️⃣ Stop the Services
 ```sh
 docker-compose -f docker-compose-dev.yml down
 ```
 
-### 4️⃣ Reset the Environment
+### 5️⃣ Reset the Environment
 ```sh
-docker-compose -f docker-compose-dev.yml down -v
-rm -rf docker-data
+docker-compose down -v  # Removes volumes
+rm -rf docker-data      # Deletes all stored data
 ```
 
 ---
 
-## 📜 API Documentation
-| Service             | Swagger URL                                                                      |
-|---------------------|----------------------------------------------------------------------------------|
+## 📜 Microservices API Documentation
+| Service            | Swagger URL                                                                      |
+|--------------------|----------------------------------------------------------------------------------|
 | 📦 Order Management | [http://localhost:10001/swagger-ui.html](http://localhost:10001/swagger-ui.html) |
-| ✉️ Email Service    | [http://localhost:10002/swagger-ui.html](http://localhost:10002/swagger-ui.html) |
-| 🔄 Kafka-UI         | [http://localhost:18080](http://localhost:18080)                                 |
-
-🛑 **Loyalty Service does not have an exposed API**. It only processes rewards internally 🎯.
+| ✉️ Email Service   | [http://localhost:10002/swagger-ui.html](http://localhost:10002/swagger-ui.html) |
+| 🏆 Loyalty Service  | [http://localhost:10003/swagger-ui.html](http://localhost:10003/swagger-ui.html) |
+| 🔄 Kafka-UI        | [http://localhost:18080](http://localhost:18080)                                 |
 
 ---
 
@@ -190,7 +231,5 @@ If loyalty points are awarded, another email is sent:
 - ✅ **Fully containerized** with **Docker Compose**.  
 - 🔄 [**CI/CD** using **GitHub Actions**.  ](https://github.com/DzakirinMD/customer-product-technical-assesment/actions)
 - 📜 **OpenAPI documentation** for API testing.  
-
-🎯 **Loyalty Service does not expose APIs**, it only processes loyalty points.  
 
 🚀 **Follow the setup instructions above to start the application!** 🚀
