@@ -1,13 +1,13 @@
 package net.dzakirin.service;
 
-import lombok.CustomLog;
 import lombok.RequiredArgsConstructor;
+import net.dzakirin.common.dto.event.OrderEvent;
+import net.dzakirin.common.dto.response.BaseListResponse;
+import net.dzakirin.common.dto.response.BaseResponse;
 import net.dzakirin.constant.ErrorCodes;
 import net.dzakirin.constant.EventType;
 import net.dzakirin.dto.request.OrderProductRequest;
 import net.dzakirin.dto.request.OrderRequest;
-import net.dzakirin.common.dto.response.BaseListResponse;
-import net.dzakirin.common.dto.response.BaseResponse;
 import net.dzakirin.dto.response.OrderResponse;
 import net.dzakirin.exception.InsufficientStockException;
 import net.dzakirin.exception.ResourceNotFoundException;
@@ -20,7 +20,6 @@ import net.dzakirin.model.OrderProduct;
 import net.dzakirin.model.Product;
 import net.dzakirin.producer.OrderDataChangedProducer;
 import net.dzakirin.repository.CustomerRepository;
-import net.dzakirin.common.dto.event.OrderEvent;
 import net.dzakirin.repository.OrderRepository;
 import net.dzakirin.repository.ProductRepository;
 import org.springframework.data.domain.Page;
@@ -37,7 +36,6 @@ import java.util.stream.Collectors;
 import static net.dzakirin.constant.ErrorCodes.MINIMUM_ORDER_QUANTITY;
 
 @Service
-@CustomLog
 @RequiredArgsConstructor
 public class OrderService {
 
@@ -60,7 +58,6 @@ public class OrderService {
     }
 
     public BaseResponse<OrderResponse> getOrderById(UUID orderId) {
-        log.info("Opening this Pull Request to demonstrate Github action pipeline");
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException(ErrorCodes.ORDER_NOT_FOUND.getMessage(orderId.toString())));
 

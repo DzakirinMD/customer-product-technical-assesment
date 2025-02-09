@@ -54,7 +54,7 @@ public class ProductController {
         return ResponseEntity.ok(productService.createProduct(productRequest));
     }
 
-    @Operation(summary = "Update an existing product")
+    @Operation(summary = "Update an existing product (supports partial update)")
     @PutMapping("/{id}")
     public ResponseEntity<BaseResponse<ProductResponse>> updateProduct(
             @PathVariable UUID id,

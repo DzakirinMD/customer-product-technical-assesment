@@ -1,10 +1,10 @@
 package net.dzakirin.service;
 
 import lombok.RequiredArgsConstructor;
-import net.dzakirin.constant.ErrorCodes;
-import net.dzakirin.dto.request.ProductRequest;
 import net.dzakirin.common.dto.response.BaseListResponse;
 import net.dzakirin.common.dto.response.BaseResponse;
+import net.dzakirin.constant.ErrorCodes;
+import net.dzakirin.dto.request.ProductRequest;
 import net.dzakirin.dto.response.ProductResponse;
 import net.dzakirin.exception.ResourceNotFoundException;
 import net.dzakirin.exception.ValidationException;
@@ -18,8 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.UUID;
-
-import static net.dzakirin.constant.ErrorCodes.*;
 
 @Service
 @RequiredArgsConstructor
@@ -52,6 +50,8 @@ public class ProductService {
 
     @Transactional
     public BaseResponse<ProductResponse> createProduct(ProductRequest productRequest) {
+        validateProductRequest(productRequest, true);
+
         Product product = ProductMapper.toProduct(productRequest);
         productRepository.save(product);
 
@@ -64,14 +64,22 @@ public class ProductService {
 
     @Transactional
     public BaseResponse<ProductResponse> updateProduct(UUID productId, ProductRequest updatedProductRequest) {
-        productRequestValidation(updatedProductRequest);
-
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException(ErrorCodes.PRODUCT_NOT_FOUND.getMessage(productId.toString())));
 
-        product.setTitle(updatedProductRequest.getTitle());
-        product.setPrice(updatedProductRequest.getPrice());
-        product.setStock(updatedProductRequest.getStock());
+        validateProductRequest(updatedProductRequest, false);
+
+        // Only update fields if provided
+        if (updatedProductRequest.getTitle() != null) {
+            product.setTitle(updatedProductRequest.getTitle());
+        }
+        if (updatedProductRequest.getPrice() != null) {
+            product.setPrice(updatedProductRequest.getPrice());
+        }
+        if (updatedProductRequest.getStock() != null) {
+            product.setStock(updatedProductRequest.getStock());
+        }
+
         productRepository.save(product);
 
         return BaseResponse.<ProductResponse>builder()
@@ -89,19 +97,21 @@ public class ProductService {
         productRepository.deleteById(productId);
     }
 
-    private void productRequestValidation(ProductRequest productRequest) {
-        if (productRequest.getTitle() == null || productRequest.getTitle().trim().isEmpty()) {
-            throw new ValidationException(PRODUCT_TITLE_EMPTY.getMessage());
+    private void validateProductRequest(ProductRequest productRequest, boolean isCreate) {
+        if (isCreate && (productRequest.getTitle() == null || productRequest.getTitle().trim().isEmpty())) {
+            throw new ValidationException(ErrorCodes.PRODUCT_TITLE_EMPTY.getMessage());
         }
-        if (productRequest.getTitle().length() < 3 || productRequest.getTitle().length() > 255) {
-            throw new ValidationException(PRODUCT_TITLE_CHARACTER_VALIDATION.getMessage());
+
+        if (productRequest.getTitle() != null && (productRequest.getTitle().length() < 3 || productRequest.getTitle().length() > 255)) {
+            throw new ValidationException(ErrorCodes.PRODUCT_TITLE_CHARACTER_VALIDATION.getMessage());
         }
-        if (productRequest.getPrice() == null || productRequest.getPrice().compareTo(BigDecimal.ZERO) < 0) {
-            throw new ValidationException(PRODUCT_PRICE_VALIDATION.getMessage());
+
+        if (productRequest.getPrice() != null && productRequest.getPrice().compareTo(BigDecimal.ZERO) < 0) {
+            throw new ValidationException(ErrorCodes.PRODUCT_PRICE_VALIDATION.getMessage());
         }
-        if (productRequest.getStock() == null || productRequest.getStock() < 0) {
-            throw new ValidationException(PRODUCT_STOCK_VALIDATION.getMessage());
+
+        if (productRequest.getStock() != null && productRequest.getStock() < 0) {
+            throw new ValidationException(ErrorCodes.PRODUCT_STOCK_VALIDATION.getMessage());
         }
     }
-
 }
