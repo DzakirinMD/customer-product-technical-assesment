@@ -117,14 +117,36 @@ Run all services using **Docker Compose**:
 mvn clean package
 docker-compose up --build -d
 ```
-⚠️ **Wait ~30 seconds** for services to start. Start up performance depends on your computer.
+⚠️ **Wait ~30 seconds** for services to start. Startup performance depends on your computer.
 
-### 3️⃣ Stop the Services
+### 3️⃣ Connect to the Database
+You can connect to the **PostgreSQL database** using the following credentials:
+
+```
+🔗 **Connection URL:** `jdbc:postgresql://localhost:5435/postgres`
+👤 **User:** `postgres`
+🔑 **Password:** `postgres`
+📂 **Database:** `postgres`
+```
+
+#### **Connect Using CLI**
+```sh
+psql -h localhost -p 5435 -U postgres -d postgres
+```
+
+#### **Connect Using DBeaver / PgAdmin**
+- **Host:** `localhost`
+- **Port:** `5435`
+- **Username:** `postgres`
+- **Password:** `postgres`
+- **Database Name:** `postgres`
+
+### 4️⃣ Stop the Services
 ```sh
 docker-compose down
 ```
 
-### 4️⃣ Reset the Environment
+### 5️⃣ Reset the Environment
 ```sh
 docker-compose down -v  # Removes volumes
 rm -rf docker-data      # Deletes all stored data
@@ -147,15 +169,37 @@ docker-compose -f docker-compose-dev.yml up --build -d
 ⚠️ **After this, start each microservice manually!**  
 ⚠️ **Set environment variable** → `spring.profiles.active=dev` when running services.
 
-### 3️⃣ Stop the Services
+### 3️⃣ Connect to the Database
+You can connect to the **PostgreSQL database** using the following credentials:
+
+```
+🔗 **Connection URL:** `jdbc:postgresql://localhost:5435/postgres`
+👤 **User:** `postgres`
+🔑 **Password:** `postgres`
+📂 **Database:** `postgres`
+```
+
+#### **Connect Using CLI**
+```sh
+psql -h localhost -p 5435 -U postgres -d postgres
+```
+
+#### **Connect Using DBeaver / PgAdmin**
+- **Host:** `localhost`
+- **Port:** `5435`
+- **Username:** `postgres`
+- **Password:** `postgres`
+- **Database Name:** `postgres`
+
+### 4️⃣ Stop the Services
 ```sh
 docker-compose -f docker-compose-dev.yml down
 ```
 
-### 4️⃣ Reset the Environment
+### 5️⃣ Reset the Environment
 ```sh
-docker-compose -f docker-compose-dev.yml down -v
-rm -rf docker-data
+docker-compose down -v  # Removes volumes
+rm -rf docker-data      # Deletes all stored data
 ```
 
 ---

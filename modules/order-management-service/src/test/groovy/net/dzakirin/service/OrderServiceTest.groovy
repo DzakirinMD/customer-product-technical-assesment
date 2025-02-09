@@ -1,6 +1,6 @@
 package net.dzakirin.service
 
-
+import net.dzakirin.constant.ErrorCodes
 import net.dzakirin.dto.request.OrderProductRequest
 import net.dzakirin.dto.request.OrderRequest
 import net.dzakirin.dto.response.BaseListResponse
@@ -8,6 +8,7 @@ import net.dzakirin.dto.response.BaseResponse
 import net.dzakirin.dto.response.OrderResponse
 import net.dzakirin.exception.InsufficientStockException
 import net.dzakirin.exception.ResourceNotFoundException
+import net.dzakirin.exception.ValidationException
 import net.dzakirin.mapper.OrderMapper
 import net.dzakirin.model.Customer
 import net.dzakirin.model.Order
@@ -117,8 +118,19 @@ class OrderServiceTest extends Specification {
     def "createOrder: should throw ResourceNotFoundException if customer does not exist"() {
         given:
         def customerId = UUID.randomUUID()
-        def orderRequest = new OrderRequest(customerId: customerId, orderProducts: [])
-        customerRepository.findById(customerId) >> Optional.empty()
+        def productId = UUID.randomUUID()
+
+        def orderRequest = OrderRequest.builder()
+                .customerId(customerId)
+                .orderProducts([
+                        OrderProductRequest.builder().productId(productId).quantity(1).build()
+                ])
+                .build()
+
+        def product = Product.builder().id(productId).stock(10).build()
+
+        productRepository.findAllById([productId]) >> [product] // Mock product retrieval
+        customerRepository.findById(customerId) >> Optional.empty() // Simulate customer not found
 
         when:
         orderService.createOrder(orderRequest)
@@ -143,4 +155,55 @@ class OrderServiceTest extends Specification {
         then:
         thrown(InsufficientStockException)
     }
+
+    def "createOrder: should throw ResourceNotFoundException if some products do not exist"() {
+        given:
+        def customerId = UUID.randomUUID()
+        def productId1 = UUID.randomUUID()
+        def productId2 = UUID.randomUUID() // This product does not exist in DB
+
+        def orderRequest = OrderRequest.builder()
+                .customerId(customerId)
+                .orderProducts([
+                        OrderProductRequest.builder().productId(productId1).quantity(2).build(),
+                        OrderProductRequest.builder().productId(productId2).quantity(3).build()
+                ])
+                .build()
+
+        def customer = Customer.builder().id(customerId).build()
+        def product1 = Product.builder().id(productId1).stock(10).build()
+
+        customerRepository.findById(customerId) >> Optional.of(customer)
+        productRepository.findAllById([productId1, productId2]) >> [product1] // Only product1 is found
+
+        when:
+        orderService.createOrder(orderRequest)
+
+        then:
+        def ex = thrown(ResourceNotFoundException)
+        ex.message == ErrorCodes.PRODUCT_LIST_INVALID.getMessage([productId2].toString())
+    }
+
+    def "createOrder: should throw ValidationException if any product has quantity less than 1"() {
+        given:
+        def customerId = UUID.randomUUID()
+        def productId1 = UUID.randomUUID()
+        def productId2 = UUID.randomUUID()
+
+        def orderRequest = OrderRequest.builder()
+                .customerId(customerId)
+                .orderProducts([
+                        OrderProductRequest.builder().productId(productId1).quantity(2).build(),
+                        OrderProductRequest.builder().productId(productId2).quantity(0).build() // Invalid quantity
+                ])
+                .build()
+
+        when:
+        orderService.createOrder(orderRequest)
+
+        then:
+        def ex = thrown(ValidationException)
+        ex.message == ErrorCodes.MINIMUM_ORDER_QUANTITY.getMessage([productId2].toString())
+    }
+
 }
