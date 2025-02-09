@@ -113,7 +113,7 @@ cd customer-product-technical-assesment
 Run all services using **Docker Compose**:
 ```sh
 mvn clean package
-docker-compose up --build -d
+docker-compose up --build -d 
 ```
 ⚠️ **Wait ~30 seconds** for services to start. Startup performance depends on your computer.
 
