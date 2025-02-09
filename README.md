@@ -213,13 +213,23 @@ rm -rf docker-data      # Deletes all stored data
 ---
 
 ## 📧 Expected Email Notifications
-When an order is placed, an email is sent:
+⚠️❗ IMPORTANT NOTICE ❗⚠️
+
+If you did not receive an email after placing an order, please check your `email-service` configuration:
+
+🔹 Open the `application.properties` file in the Email Service. <br/>
+🔹 Ensure `spring.mail.username` and `spring.mail.password` are correctly set. <br/>
+🔹 Recommended: Use Gmail as it has been tested and confirmed to work. <br/>
+
+💡 Tip: If using Gmail, enable "Less Secure Apps" or set up an App Password for better security. 🚀 <br/>
+
+When an order is placed, an order confirmation email is sent: 
 
   ![Order Confirmation Email](assets/order-confirmation-email.JPG)
 
 <br/>
 
-If loyalty points are awarded, another email is sent:
+If loyalty points are awarded, another loyalty reward email is sent:
 
   ![Loyalty Reward Email](assets/loyalty-reward-email.JPG)
 
