@@ -1,5 +1,6 @@
 package net.dzakirin.service;
 
+import lombok.CustomLog;
 import lombok.RequiredArgsConstructor;
 import net.dzakirin.constant.ErrorCodes;
 import net.dzakirin.constant.EventType;
@@ -36,6 +37,7 @@ import java.util.stream.Collectors;
 import static net.dzakirin.constant.ErrorCodes.MINIMUM_ORDER_QUANTITY;
 
 @Service
+@CustomLog
 @RequiredArgsConstructor
 public class OrderService {
 
@@ -58,6 +60,7 @@ public class OrderService {
     }
 
     public BaseResponse<OrderResponse> getOrderById(UUID orderId) {
+        log.info("Opening this Pull Request to demonstrate Github action pipeline");
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException(ErrorCodes.ORDER_NOT_FOUND.getMessage(orderId.toString())));
 
