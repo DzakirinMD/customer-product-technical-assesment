@@ -3,8 +3,8 @@ package net.dzakirin.service
 import net.dzakirin.constant.ErrorCodes
 import net.dzakirin.dto.request.OrderProductRequest
 import net.dzakirin.dto.request.OrderRequest
-import net.dzakirin.dto.response.BaseListResponse
-import net.dzakirin.dto.response.BaseResponse
+import net.dzakirin.common.dto.response.BaseListResponse
+import net.dzakirin.common.dto.response.BaseResponse
 import net.dzakirin.dto.response.OrderResponse
 import net.dzakirin.exception.InsufficientStockException
 import net.dzakirin.exception.ResourceNotFoundException
