@@ -36,7 +36,7 @@ public class LoyaltyPointsController {
             @Parameter(description = "Sorting field",
                     array = @ArraySchema(schema = @Schema(allowableValues = {"totalPoints", "lastUpdated"},
                             type = "string")))
-            @RequestParam(defaultValue = "title") String[] sort) {
+            @RequestParam(defaultValue = "lastUpdated") String[] sort) {
         Pageable pageable = PageRequest.of(page - 1, size, Sort.by(sort).descending());
         return ResponseEntity.ok(loyaltyPointsService.getAllLoyaltyPoints(pageable));
     }
