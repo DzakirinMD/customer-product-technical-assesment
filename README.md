@@ -21,19 +21,19 @@ This project consists of **three microservices**:
 ---
 
 ## ⚙️ Tech Stack
-| Technology              | Purpose                                |
-|-------------------------|----------------------------------------|
-| **Java 17+**            | Programming Language                   |
-| **Spring Boot 3.3.x**   | Application Framework                  |
-| **Spring WebFlux**      | Reactive Programming (Loyalty Service) |
-| **Spring Data JPA**     | Database Interaction                   |
-| **Kafka**               | Event Streaming                        |
-| **OpenAPI (SpringDoc)** | API Documentation                      |
-| **PostgreSQL**          | Relational Database                    |
-| **Groovy & Spock**      | Unit Testing                           |
-| **Maven**               | Dependency Management                  |
+| Technology                  | Purpose                                |
+|-----------------------------|----------------------------------------|
+| **Java 17+**                | Programming Language                   |
+| **Spring Boot 3.4.x**       | Application Framework                  |
+| **Spring WebFlux**          | Reactive Programming (Loyalty Service) |
+| **Spring Data JPA**         | Database Interaction                   |
+| **Kafka**                   | Event Streaming                        |
+| **OpenAPI (SpringDoc)**     | API Documentation                      |
+| **PostgreSQL**              | Relational Database                    |
+| **Groovy & Spock**          | Unit Testing                           |
+| **Maven**                   | Dependency Management                  |
 | **Docker & Docker Compose** | Containerization                       |
-| **GitHub Actions**      | [CI/CD Pipeline](https://github.com/DzakirinMD/customer-product-technical-assesment/actions)                     |
+| **GitHub Actions**          | [CI/CD Pipeline](https://github.com/DzakirinMD/customer-product-technical-assesment/actions)                     |
 
 ---
 
@@ -105,8 +105,8 @@ This project consists of **three microservices**:
 ## 🏭 Setup and Running the Services in Prod Mode
 ### 1️⃣ Clone the Repository
 ```sh
-git clone https://github.com/DzakirinMD/template-be.git
-cd template-be
+git clone https://github.com/DzakirinMD/customer-product-technical-assesment.git
+cd customer-product-technical-assesment
 ```
 
 ### 2️⃣ Start the Services
@@ -155,8 +155,8 @@ rm -rf docker-data      # Deletes all stored data
 ## 🛠 Setup and Running the Services in Dev Mode
 ### 1️⃣ Clone the Repository
 ```sh
-git clone https://github.com/DzakirinMD/template-be.git
-cd template-be
+git clone https://github.com/DzakirinMD/customer-product-technical-assesment.git
+cd customer-product-technical-assesment
 ```
 
 ### 2️⃣ Start the **Kafka & Database Only**
